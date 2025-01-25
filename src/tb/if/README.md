@@ -33,9 +33,9 @@ interface spi_if(input logic clk, reset_n);
     logic [7:0] reg_addr;
     logic reg_write;
     logic [7:0] reg_wdata;
-    output logic [7:0] reg_rdata;
-    output logic miso;
-    output logic ready;
+    logic [7:0] reg_rdata;
+    logic miso;
+    logic ready;
 
     // Modports for Master and Slave
     modport master(input clk, reset_n, cs_n, mosi, sclk, mode, reg_addr, reg_write, reg_wdata, output reg_rdata, miso, ready);
