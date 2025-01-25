@@ -1,11 +1,17 @@
-interface spi_if(input logic clk, input logic reset_n);
-    logic mosi;
-    logic miso;
+interface spi_if(input logic clk, reset_n);
+    // SPI signals
     logic cs_n;
+    logic mosi;
     logic sclk;
-    logic [7:0] data_in;
-    logic [7:0] data_out;
+    logic mode;
+    logic [7:0] reg_addr;
+    logic reg_write;
+    logic [7:0] reg_wdata;
+    output logic [7:0] reg_rdata;
+    output logic miso;
+    output logic ready;
 
-    modport master(input clk, input reset_n, output mosi, input miso, output cs_n, output sclk);
-    modport slave(input clk, input reset_n, input mosi, output miso, input cs_n, input sclk);
+    // Modports for Master and Slave
+    modport master(input clk, reset_n, cs_n, mosi, sclk, mode, reg_addr, reg_write, reg_wdata, output reg_rdata, miso, ready);
+    modport slave(input clk, reset_n, cs_n, sclk, mode, reg_addr, reg_write, reg_wdata, output reg_rdata, mosi, miso, ready);
 endinterface
