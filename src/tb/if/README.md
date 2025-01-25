@@ -1,40 +1,43 @@
-# SPI UVM Testbench - Interface Overview
+# SPI Verification Environment in UVM
 
 ## Introduction
 
-In the context of the SPI UVM Testbench, we utilize **SystemVerilog interfaces** to encapsulate and manage the signals of the SPI Design Under Test (DUT) in a structured and reusable way. An interface serves as a container for related signals, grouping them together in a single unit. This allows us to simplify the connection between the DUT, testbench components, and other verification elements.
+This repository contains the UVM-based testbench environment for verifying the SPI (Serial Peripheral Interface) Design Under Test (DUT). The DUT implements both master and slave modes for SPI communication, and the testbench verifies its functionality using a SystemVerilog interface to model and connect the signals.
 
-### What is a SystemVerilog Interface?
+## What is an Interface in SystemVerilog?
 
-A **SystemVerilog Interface** is a construct used to group related signals together, encapsulating them into a single block. This block can then be reused across multiple projects, making it a powerful tool for design and verification. The key benefit of an interface is that it allows us to manage and organize multiple signals under a single entity, making the code cleaner and easier to maintain. Interfaces are especially useful in complex designs, where multiple signals need to be passed between components. Instead of having to pass each signal individually, the interface consolidates them into a single object.
+An Interface in SystemVerilog is a way to encapsulate related signals into a block, providing a structured approach to managing multiple signals. Interfaces allow grouping signals together, simplifying the connection to the Design Under Test (DUT) and other components in the verification environment. This encapsulation enables reusability and improves modularity.
 
-#### Why Use Interfaces?
+Interfaces define the communication links between components, and the signals within an interface are typically grouped based on their functionality. The use of interfaces enhances maintainability and scalability of verification environments by keeping signal groupings organized.
 
-- **Encapsulation**: Related signals are grouped together, improving code clarity and organization.
-- **Reusability**: The interface block can be reused in multiple projects or testbenches, reducing the need to redefine the same signals.
-- **Simplification**: Reduces clutter in top-level modules by allowing a single interface object to be passed to various components.
-- **Modport Support**: Modports allow us to define the direction of the signals (input/output), making it easier to connect the DUT and other verification components.
+## Defining Signal Directions Using Modports
 
-### Defining Modports: Signal Directions
+Interface signals can be utilized in both the DUT and verification components. To manage different signal directions (input, output), modports are used. Modports allow defining the direction for each signal in the interface based on the component interacting with it.
 
-In SystemVerilog, interfaces can include **modports** to define the direction of the signals. Modports are essential for controlling how signals flow between components, such as the DUT, drivers, monitors, and other elements of the verification environment.
+For instance, a modport is defined for master-mode signals, and a different modport for slave-mode signals. This enables clear separation of the signal direction and ensures that signals are passed correctly between the components.
 
-- **Input Modport**: Defines signals that are inputs to the interface (e.g., `mosi`, `clk`).
-- **Output Modport**: Defines signals that are outputs from the interface (e.g., `miso`, `ready`).
+## Creating and Connecting the Interface to the DUT
 
-By using modports, we can assign specific signal directions for each component, making it easier to connect and manage different elements of the testbench.
+In the top-level testbench module, an interface object is instantiated and passed to the DUT. The correct modport must be assigned to ensure that the DUT receives the correct direction of signals.
 
-### Example of Modport Definitions
+For example, when the DUT operates in Master Mode, the interface signals are passed with the master modport, and when the DUT operates in Slave Mode, the interface signals are passed with the slave modport. This approach simplifies the connection and ensures that each component in the verification environment receives the correct signals.
 
 ```systemverilog
-interface spi_if(input logic clk, input logic reset_n);
-    logic mosi;
-    logic miso;
+// SPI Interface Definition
+interface spi_if(input logic clk, reset_n);
+    // SPI signals
     logic cs_n;
+    logic mosi;
     logic sclk;
-    logic [7:0] data_in;
-    logic [7:0] data_out;
+    logic mode;
+    logic [7:0] reg_addr;
+    logic reg_write;
+    logic [7:0] reg_wdata;
+    output logic [7:0] reg_rdata;
+    output logic miso;
+    output logic ready;
 
-    modport master(input clk, input reset_n, output mosi, input miso, output cs_n, output sclk);
-    modport slave(input clk, input reset_n, input mosi, output miso, input cs_n, input sclk);
+    // Modports for Master and Slave
+    modport master(input clk, reset_n, cs_n, mosi, sclk, mode, reg_addr, reg_write, reg_wdata, output reg_rdata, miso, ready);
+    modport slave(input clk, reset_n, cs_n, sclk, mode, reg_addr, reg_write, reg_wdata, output reg_rdata, mosi, miso, ready);
 endinterface
