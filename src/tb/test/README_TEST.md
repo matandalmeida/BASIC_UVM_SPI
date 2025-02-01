@@ -36,5 +36,5 @@ sequenceDiagram
     Driver->>DUT: stimulate_signals()
     Monitor->>Scoreboard: capture_results()
     Scoreboard->>Test: update_metrics()
-    Test->>-Env: test_complete()
+    Test->>Env: test_complete()
 ```
