@@ -1,6 +1,7 @@
 # UVM SPI Driver & Testbench Environment
 
-![SPI UVM Architecture](https://i.imgur.com/mQ5TlqE.png)
+![SPI UVM Architecture](https://github.com/user-attachments/assets/2b991541-950d-4af5-81df-ce0b17d32cd7)
+
 
 ## 📌 Overview
 Este projeto implementa um ambiente de verificação UVM para um controlador SPI (Serial Peripheral Interface), com driver configurável para operação Master/Slave. O ambiente inclui componentes UVM completos para validação do protocolo SPI.
