@@ -14,18 +14,15 @@ O `spi_scoreboard` é o componente responsável pela verificação funcional do 
 ## ⚙️ Diagrama de Funcionamento
 ```mermaid
 sequenceDiagram
-    participant Agent
-    participant Scoreboard
-    participant DUT
+    participant D as Driver
+    participant R as Refmod
+    participant S as Scoreboard
+    participant M as Monitor
     
-    Agent->>Scoreboard: Transação Monitorada
-    Scoreboard->>Scoreboard: Busca Transação Esperada
-    alt Transação Encontrada
-        Scoreboard->>Scoreboard: Compara Dados/Timing
-        Scoreboard->>Scoreboard: Atualiza Estatísticas
-    else Transação Não Encontrada
-        Scoreboard->>Agent: Reporta Erro
-    end
+    D->>R: Transação enviada
+    R->>S: Transação esperada
+    M->>S: Transação real
+    S->>S: Comparação
 ```
 ## 📋 Estrutura do Código
 ### Portas de Comunicação
@@ -39,7 +36,8 @@ A tabela abaixo descreve os principais métodos implementados no componente `spi
 
 | **Método**               | **Descrição**                                                                 | **Parâmetros**                     |
 |--------------------------|-----------------------------------------------------------------------------|------------------------------------|
-| `write()`                | Recebe transações do monitor através da análise port                        | `spi_transaction tr`               |
+| `write_mon()`            |Recebe transações do monitor                                                    | `spi_transaction tr`               |
+| `write_refmod()`         | Recebe previsões do refmod                                                     | `spi_transaction tr`               |
 | `compare_transactions()` | Compara transação monitorada com a esperada (dados + timing)                | `actual`: DUT<br>`expected`: Modelo |
 | `get_report()`           | Gera relatório final com estatísticas de verificação                       | -                                  |
 | `add_expected()`         | Adiciona transação à fila de esperados para comparação futura               | `spi_transaction tr`               |
