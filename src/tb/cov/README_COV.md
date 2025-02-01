@@ -1,7 +1,5 @@
 # SPI UVM Coverage Documentation
 
-![Coverage Architecture](https://i.imgur.com/mQ5TlqE.png)
-
 ## 📌 Visão Geral
 O componente `spi_coverage` implementa a cobertura funcional para o ambiente de verificação SPI, garantindo que todos os cenários críticos sejam testados.
 
