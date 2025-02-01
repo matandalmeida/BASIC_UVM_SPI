@@ -64,7 +64,23 @@ The UVM testbench for SPI includes the following major blocks:
 
 Below is a diagram illustrating the structure of the UVM testbench for the SPI verification:
 
-![image](https://github.com/user-attachments/assets/5f5ab9ed-9cf3-4997-ade9-65afc1472584)
+# Top-Level Testbench Documentation
+
+## Overview
+This module serves as the root of the verification environment, integrating:
+- Clock/Reset generation
+- DUT instantiation
+- UVM test harness
+- Simulation control
+
+## Architecture
+```mermaid
+graph TB
+    TOP[tb_top] --> DUT[SPI Device]
+    TOP --> UVM[UVM Environment]
+    TOP --> CLK[Clock/Reset]
+    UVM -->|Virtual Interface| DUT
+```
 
 ## Conclusion
 
