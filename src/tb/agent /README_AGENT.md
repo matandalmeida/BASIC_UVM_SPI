@@ -119,7 +119,7 @@ endfunction
 ```
 ## 🚨 Debug Comum
 | Sintoma    | Causa Provável | Solução                         |
-|-------------|------|-----------------|-----------------------------------|
+|-------------|------|-----------------------------------|
 | Transações não geradas	 | Agent em modo PASSIVE	  | Verificar is_active    |
 |  Dados invertidos	  |  Modo Master/Slave incorreto	    | Checar configuração mode          |
 | Sem comunicação	     | Interface não conectada	  | Verificar uvm_config_db |
