@@ -25,7 +25,7 @@ class spi_monitor extends uvm_monitor;
     virtual function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         if (!uvm_config_db#(virtual spi_interface.monitor)::get(this, "", "vif", vif))
-            `uvm_fatal("NOVIF", "Interface não encontrada")
+            `uvm_fatal("NOVIF", "Interface not found")
         if (!uvm_config_db#(bit)::get(this, "", "mode", mode))
             `uvm_warning("NOCFG", "Modo não configurado, usando padrão Master")
         if (!uvm_config_db#(bit)::get(this, "", "lsb_first", lsb_first))
