@@ -14,8 +14,9 @@ class spi_driver extends uvm_driver #(spi_transaction);
   // Fase de conexão
   virtual function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
-    if (!uvm_config_db#(virtual spi_interface.master)::get(this, "", "vif", vif))
-      `uvm_fatal("NOVIF", "Falha ao obter a interface virtual")
+    // Get interface with slave modport when DUT is master
+    if (!uvm_config_db#(virtual spi_interface.slave)::get(this, "", "vif", vif))
+        `uvm_fatal("NOVIF", "Failed to get vif")
   endfunction
 
   // Tarefa principal de execução
