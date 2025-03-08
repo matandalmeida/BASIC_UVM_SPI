@@ -13,8 +13,27 @@ interface spi_interface(input logic clk);
   logic       ready;
 
   // Modports para Master e Slave
-  modport master (output sclk, cs_n, input mosi, output miso);
-  modport slave (input sclk, cs_n, mosi, output miso);
+modport master (
+    output sclk, cs_n, mosi,
+    input miso,
+    // Register interface
+    input reg_addr, reg_write, reg_wdata,
+    output reg_rdata, ready
+);
+
+modport slave (
+    input sclk, cs_n, mosi,
+    output miso,
+    // Register interface
+    input reg_addr, reg_write, reg_wdata,
+    output reg_rdata, ready
+);
+
+// Add monitor modport for passive observation
+modport monitor (
+    input clk, reset_n, cs_n, mosi, miso, sclk, mode,
+    reg_addr, reg_write, reg_wdata, reg_rdata, ready
+);
 
   // Clocking blocks para sincronização
   clocking cb_master @(posedge clk);
