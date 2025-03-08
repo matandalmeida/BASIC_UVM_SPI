@@ -25,7 +25,7 @@ module tb_top;
   );
 
   // DUT instantiation
-  spi_dut dut(
+spi dut(
     .clk(intf.clk),
     .reset_n(intf.reset_n),
     .cs_n(intf.cs_n),
@@ -38,7 +38,7 @@ module tb_top;
     .reg_wdata(intf.reg_wdata),
     .reg_rdata(intf.reg_rdata),
     .ready(intf.ready)
-  );
+);
 
   // Clock generator
   initial begin
@@ -58,7 +58,7 @@ module tb_top;
     $display("\n\n=== Starting SPI UVM Testbench ===");
     
     // Set interface in config DB
-    uvm_config_db#(virtual spi_interface)::set(null, "*", "vif", intf);
+    uvm_config_db#(virtual spi_interface.monitor)::set(null, "*", "vif", intf);
     
     // Set default test if not specified
     if (!$test$plusargs("UVM_TESTNAME")) begin
