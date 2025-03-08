@@ -72,12 +72,9 @@ class spi_monitor extends uvm_monitor;
     endtask
     
     virtual task sample_master_bits();
-        // Amostra na borda de subida do SCLK
-        vif.cb_mon.sclk <= 1'b1;
-        #(clock_div * 1ns);
-        store_bit(vif.cb_mon.mosi, vif.cb_mon.miso);
-        vif.cb_mon.sclk <= 1'b0;
-        #(clock_div * 1ns);
+        // Wait for sclk posedge (DUT generates sclk in master mode)
+        @(posedge vif.cb_master.sclk);
+        store_bit(vif.cb_master.mosi, vif.cb_master.miso);
     endtask
     
     virtual task sample_slave_bits();
