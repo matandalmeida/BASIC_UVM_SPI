@@ -6,10 +6,11 @@ module spi (
     input  logic        clk,        // System clock (50MHz)
     input  logic        reset_n,    // Active-low asynchronous reset
     input  logic        cs_n,       // Chip select (active low)
-    input  logic        mosi,       // Master Out Slave In
-    output logic        miso,       // Master In Slave Out
+    inout               mosi,       // Master Out Slave In
+    inout               miso,       // Master In Slave Out
     output logic        sclk,       // SPI serial clock
     input  logic [7:0]  reg_addr,   // Register address bus
+    input  logic        mode,       // 0: Slave, 1: Master
     input  logic        reg_write,  // Register write strobe
     input  logic [7:0]  reg_wdata,  // Register write data
     output logic [7:0]  reg_rdata,  // Register read data
@@ -49,7 +50,15 @@ module spi (
     logic        spi_en;        // SPI enable signal
     logic        mode;          // Operation mode (from ctrl_reg)
     logic        lsb_first;     // Data order control
+    
+    // Internal signals
+    logic mosi_out, miso_out;
+    
+    // Tri-state buffers
+    assign mosi = (mode) ? mosi_out : 'bz; // Master drives mosi
+    assign miso = (mode) ? 'bz : miso_out; // Slave drives miso
 
+    
     // Control signals extraction
     assign spi_en    = ctrl_reg[0];
     assign mode      = ctrl_reg[1];  // Master(1)/Slave(0) mode
